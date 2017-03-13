@@ -1,6 +1,11 @@
-var router = require('koa-router')();
+import Router from 'koa-router'
 
-router.get('/', function (ctx, next) {
+const router = new Router({
+  prefix: '/users'
+});
+
+
+router.get('/a', function (ctx, next) {
   ctx.body = 'this a users response!';
 });
 

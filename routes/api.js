@@ -1,4 +1,9 @@
-const router = require('koa-router')();
+//const router = require('koa-router')();
+import Router from 'koa-router'
+
+const router = new Router({
+  prefix: '/api'
+})
 const apiCtrl = require('../controller/apiController');
 
 router.get('/getUser', apiCtrl.getUser);
