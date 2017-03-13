@@ -52,7 +52,7 @@ app.use(async (ctx, next) => {
 
 app.use(async (ctx, next) => {
 	if(/api\//.test(ctx.url)){
-		apiRequest(ctx, next);
+		apiRequest(ctx);
 	}else{
 		console.log(11)
 

@@ -2,6 +2,7 @@
 //import _ from 'lodash'
 const request = require('koa-request');
 const _ = require('lodash');
+import fetch from 'node-fetch'
 
 class ApiUtil {
 	constructor(){
@@ -35,37 +36,25 @@ class ApiUtil {
 		}
 	}
 
-	async request(ctx, responseHandler){
+	async request(ctx){
 		let data = ctx.dataCont,
 			url = global.CONFIG[ctx.dataCont.server] + ctx.dataCont.command,
 			responseData;
-		console.log(ctx.dataCont);
 		console.log(`[BODY]: ${JSON.stringify(data.data)}`)
-		var options = {
-    	url: 'https://api.github.com/repos/dionoid/koa-request',
-        headers: { 'User-Agent': 'request' }
-    };
- 
-    var response = await request(options); //Yay, HTTP requests with no callbacks! 
-    //var info = JSON.parse(response.body);
-    console.log(response)
-
-    return;
+  		
 		if(data.method == 'POST'){
 			console.log(`----------------------------------------------\n[POST TO ${url}]\n----------------------------------------------`);
 			//request.post(url, responseHandler).form(data.data);
-			let options = {
-			    url: url,
+			const options = {
 			    method: "POST",
 			    //json: true,			    
 				headers: {
 					"content-type": "application/json;chartset=utf-8",
-					"User-Agent" : 'request'
 				}, //x-www-form-urlencoded
-			    body: data.data};
+			    body: JSON.stringify(data.data)};
 
-			//request(options, responseHandler);
-			let res = request(options);
+			const res = await fetch(url, options);
+			responseData = await res.json();
 		}else{
 			let params = '?';
 			_.forEach(data.data, (v, k)=>{
@@ -76,13 +65,16 @@ class ApiUtil {
 				}
 			});
 			console.log(`----------------------------------------------\n[GET TO ${url}]\n----------------------------------------------`);
-			request.get(url+params, responseHandler);
+			const res = await fetch(url+params);
+			responseData = await res.json();
 		}
+		return responseData;
 	}
 
 	async api(ctx){
 		this.reqCont(ctx);
-		this.request(ctx, responseHandler);
+		let data = this.request(ctx);
+		ctx.body = data;
 	}
 }
 
