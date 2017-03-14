@@ -32,28 +32,7 @@
 	</div>
 
 	<div class="rightCont">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>案件ID</th>
-					<th>保协编号</th>
-					<th>案件状态</th>
-					<th>委托日期</th>
-					<th>案件调解员</th>
-					<th>操作</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="x in tData">
-					<td>{{x.id}}</td>
-					<td>{{x.clientCaseId}}</td>
-					<td>{{x.sysNodeStatus}}</td>
-					<td>{{x.gmtCaseEntrusted}}</td>
-					<td>{{x.mediator}}</td>
-					<td>{{x.action.state}}</td>
-				</tr>
-			</tbody>
-		</table>
+		<tab-list t-data="tData"></tab-list>
 	</div>
 </div>
 

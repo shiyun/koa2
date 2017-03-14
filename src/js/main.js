@@ -3,7 +3,9 @@ var myApp = angular.module('myApp', [
 		'ngCookies',
 		'LocalStorageModule',
 		'myApp.mainPage',
-		'myApp.mainPage.service'
+		'myApp.mainPage.service',
+		'myApp.directive.tabList',
+		'myApp.directive.headerTop'
 	]);
 
 myApp.config(function($stateProvider, $urlRouterProvider){

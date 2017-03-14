@@ -5,6 +5,7 @@ var myApp = angular.module('myApp', [
 		'myApp.Login',
 		'myApp.mainPage',
 		'myApp.mainPage.service',
+		'myApp.directive.tabList',
 		'myApp.directive.headerTop'
 	]);
 

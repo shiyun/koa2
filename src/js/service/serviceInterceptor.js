@@ -1,7 +1,8 @@
-var apiUrl = 'http://work.mediation.alpha.haolawyers.cn/api/';
-//var apiUrl = 'http://localhost:3002/api/';
+//var apiUrl = 'http://work.mediation.alpha.haolawyers.cn/api/';
+//var apiUrl = 'http://localhost:3001/api/';
+var apiUrl = '/api/';
 var apiCommand = {
-	GETVERIFYCODE 			: 'getVerifyCode' 						,
+	GETVERIFYCODE 			: 'RIGHT_URL/getVerifyCode' 						,
 	LOGIN 					: 'login' 								,
 	VERIFICATIONCODE 		: 'RIGHT_URL/verificationCode' 			,
 	GETCONDITIONALALLCASE 	: 'MEDIATION_URL/getConditionalAllCase' 
@@ -25,9 +26,9 @@ angular.module('myApp.mainPage.service', [])
 		mainFun.login = function(name, password) {
 			return  $http.post(apiUrl+apiCommand.LOGIN, {name: name, password: password})
 						 .then(function(res){
-						 	if(res.data.status.code == 1){
-						 		$rootScope.token = res.data.result.token;
-						 		localStorageService.add('token', res.data.result.token)
+						 	if(res.data.code == 1){
+						 		$rootScope.token = res.data.data.result.token;
+						 		localStorageService.add('token', res.data.data.result.token)
 						 		return true;
 						 	}else{
 						 		return false;
