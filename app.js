@@ -13,11 +13,10 @@ const logger = require('koa-logger');
 const index = require('./routes/index');
 const api = require('./routes/api');
 const users = require('./routes/users');
-//const respFormatter = require('./routes/middlewares/respFormatter');
 import urlFilter from './routes/middlewares/urlFilter';
 import respFormatter from './routes/middlewares/respFormatter';
-import apiDataCont from './routes/middlewares/apiDataCont';
 import apiRequest from './routes/middlewares/apiRequest';
+//import apiUtil from './util/apiUtil';
 
 // middlewares
 app.use(convert(bodyparser));
@@ -35,30 +34,22 @@ app.use(views(__dirname + '/views', {
   map: {html: 'jade'}
 }));
 */
-
-app.use(async (ctx, next) => {
-	/*
-	urlFilter('^/api', () => {
-		apiDataCont(ctx, next);
-	})
-	*/
-	if(/api\//.test(ctx.url)){
-		apiDataCont(ctx, next);
+app.use(apiRequest('^/api'));
+/*app.use(async (ctx, next) => {
+	const _url = ctx.url;
+	if(/api\//.test(_url) && !(_url.indexOf('getUser') > -1 || _url.indexOf('registerUser') > -1)){
+		let data;
+		try{
+			data = await apiUtil(ctx, true)
+		}catch(e){
+			data = {code: 0, message: '请求的路径有误！'};
+		}
+		ctx.body = data;
 	}else{
-		console.log(1)
-
+		await next()
 	}
-});
-
-app.use(async (ctx, next) => {
-	if(/api\//.test(ctx.url)){
-		apiRequest(ctx);
-	}else{
-		console.log(11)
-
-	}
-});
-//app.use(urlFilter('^/api', respFormatter));
+});*/
+app.use(urlFilter('^/api', respFormatter));
 app.use(async (ctx, next) => {
   const start = new Date();
   await next();
@@ -73,7 +64,6 @@ app.use(users.routes());
 //router.use('/api', api.routes(), api.allowedMethods());
 //router.use('/users', users.routes(), users.allowedMethods());
 //app.use(router.routes(), router.allowedMethods());
-// response
 
 app.on('error', (err, ctx) => {
   console.log(err)

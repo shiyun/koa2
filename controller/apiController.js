@@ -1,7 +1,6 @@
 let apiCtrl = {};
 
 apiCtrl.getUser = async (ctx, next) => {
-
 	ctx.body = {
 		username: '乖乖',
 		password: '123456',
