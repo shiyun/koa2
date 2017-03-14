@@ -8,6 +8,7 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser')();
 const logger = require('koa-logger');
+import session from "koa2-cookie-session";
 //const render = require('koa-ejs');
 
 const index = require('./routes/index');
@@ -34,6 +35,11 @@ app.use(views(__dirname + '/views', {
   map: {html: 'jade'}
 }));
 */
+app.use(session({
+    key: "koa2",   //default "koa:sid" 
+    expires:3, //default 7 
+    path:"/" //default "/" 
+}));
 app.use(apiRequest('^/api'));
 /*app.use(async (ctx, next) => {
 	const _url = ctx.url;

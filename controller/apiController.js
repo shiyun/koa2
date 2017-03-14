@@ -1,13 +1,39 @@
-let apiCtrl = {};
+import fetch from 'node-fetch';
+const apiArr = ['login', 'getUser', 'registerUser'];
 
-apiCtrl.getUser = async (ctx, next) => {
+let apiCtrl = {};
+let options = {
+	    method: "POST",
+		headers: {
+			"content-type": "application/json;chartset=utf-8",
+		}, 
+	    //body: JSON.stringify(data.data)
+};
+apiCtrl[apiArr[0]] = async (ctx, next) => {
+	let url = global.CONFIG['APIURL'] + 'login';
+	console.log(url)
+	console.log(ctx.request.body)
+	
+	options.body = JSON.stringify(ctx.request.body);
+	let data = await fetch(url, options);
+	let body = await data.json();
+	if(body.status.code == 1){
+		ctx.session.token = body.result.token;
+		ctx.body = body;
+	}else{
+		ctx.body = -9;
+	}
+	
+}
+
+apiCtrl[apiArr[1]] = async (ctx, next) => {
 	ctx.body = {
 		username: '乖乖',
 		password: '123456',
 	}
 }
 
-apiCtrl.registerUser = async (ctx, next) => {
+apiCtrl[apiArr[2]] = async (ctx, next) => {
 	console.log(`registerUser: `, ctx.request.body);
 	console.log(`registerUser: `, ctx.query);
 	console.log(`registerUser: `, ctx.params);
@@ -26,4 +52,7 @@ apiCtrl.registerUser = async (ctx, next) => {
 	}
 }
 
-module.exports = apiCtrl;
+module.exports = {
+	apiCtrl,
+	apiArr
+};

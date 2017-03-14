@@ -28,6 +28,10 @@ const apiUtil = async ctx =>{
 		ctx.dataCont.method = 'GET';
 	}
 
+	if(ctx.query.noToken != 'false' && ctx.session.token != undefined){
+		ctx.dataCont.data.token = ctx.session.token;
+	}
+
 	let data = ctx.dataCont,
 		_url = global.CONFIG[data.server] + data.command,
 		res, responseData;
@@ -58,6 +62,7 @@ const apiUtil = async ctx =>{
 		res = await fetch(_url+params);
 	}
 	responseData = await res.json();
+	console.log(`----------------------------------------------\n[RESPONSE BODY]: ${JSON.stringify(responseData)}\n----------------------------------------------`);
 	return responseData;
 }
 

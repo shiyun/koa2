@@ -1,4 +1,5 @@
 import apiUtil from '../../util/apiUtil'
+import {apiArr} from '../../controller/apiController';
 
 const apiRequest = (pattern) => {	
 	return async (ctx, next) => {
@@ -16,7 +17,10 @@ const apiRequest = (pattern) => {
 
 			throw error;
 		}
-		if(reg.test(ctx.originalUrl)){
+		const _url = ctx.originalUrl;
+		const commandArr = _url.split('/');
+		const command = commandArr[commandArr.length - 1];
+		if(reg.test(_url) && apiArr.indexOf(command) == -1){
 			let data = await apiUtil(ctx);
 			ctx.body  = data;
 		}
