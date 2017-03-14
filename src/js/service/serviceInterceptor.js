@@ -2,8 +2,9 @@
 //var apiUrl = 'http://localhost:3001/api/';
 var apiUrl = '/api/';
 var apiCommand = {
-	GETVERIFYCODE 			: 'RIGHT_URL/getVerifyCode' 						,
+	GETVERIFYCODE 			: 'RIGHT_URL/getVerifyCode'				,
 	LOGIN 					: 'login' 								,
+	LOGOUT 					: 'logout' 								,
 	VERIFICATIONCODE 		: 'RIGHT_URL/verificationCode' 			,
 	GETCONDITIONALALLCASE 	: 'MEDIATION_URL/getConditionalAllCase' 
 }

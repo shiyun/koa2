@@ -6,7 +6,8 @@ var myApp = angular.module('myApp', [
 		'myApp.mainPage',
 		'myApp.mainPage.service',
 		'myApp.directive.tabList',
-		'myApp.directive.headerTop'
+		'myApp.directive.headerTop',
+		'myApp.directive.formStep1'		
 	]);
 
 myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider){

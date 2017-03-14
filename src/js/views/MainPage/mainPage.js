@@ -3,5 +3,6 @@ angular.module('myApp.mainPage', ['ui.router'])
         function(mainService, $scope, $cookieStore, $sce, localStorageService, $state, $rootScope, $stateParams) {
             mainService.getConditionalAllCase(1, localStorageService.get('token')).then(function(res){
             	$scope.tData = res;
+            	$scope.$emit('formData', res);
             });            
     }]);
