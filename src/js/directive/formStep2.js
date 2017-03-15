@@ -1,5 +1,5 @@
-angular.module('myApp.directive.formStep1', [
-]).directive('formStep1', ["mainService", "$cookieStore", "$state", "$stateParams",  function(mainService, $cookieStore, $state, $stateParams) {
+angular.module('myApp.directive.formStep2', [
+]).directive('formStep2', ["mainService", "$cookieStore", "$state", "$stateParams",  function(mainService, $cookieStore, $state, $stateParams) {
     return {
         restrict: 'EA',
         replace: true,
@@ -15,36 +15,17 @@ angular.module('myApp.directive.formStep1', [
         '*保险公司代理人<input type="text" name="insuranceAgent" ng-model="insuranceAgent" placeholder="保险公司代理人" required /><br />'+
         '*保险公司代理人联系方式<input type="text" name="insuranceAgentContact" ng-model="insuranceAgentContact" placeholder="保险公司代理人联系方式" required /><br />'+        
         '<area-level></area-level>' + 
-        '<p class="mt20 mb20"><button ng-click="submitStep1()">提交</button></p>' + 
+        '<p class="mt20 mb20"><button ng-click="submitStep2(1)">提交</button><button class="ml10" ng-click="submitStep2(-1)">返回</button></p>' + 
         '</form>',
         controller: ["$scope", function($scope) {
-            $scope.titlename = '填写基本信息'
+            $scope.titlename = '填写被保险人信息'
         }],
         link: function postLink(scope, iElement, iAttrs, controller) { 
-            mainService.getChannelAndCompany().then(function(data){
-                scope.channels = data.channels;
-                scope.companies = data.companies;
-            });
-
-            var id = $stateParams.id; //获取的caseid
+            var id = $stateParams.id;
             var step = $stateParams.step;
-
-            scope.submitStep1 = function(){
-                $state.go('MainPage', {step: Number(step) + 1, id: 657})   //设个假的， 真实数据为获取的caseid;             
-            }
-
-            scope.$on('area', function(event, data){
-                console.log(data)
-            });
-
-            if(id != 0){
-                mainService.getCaseBaseInfo(id).then(function(data){
-                    console.log(data);
-                    scope.pChannelSn = data.mediationCase.pChannelSn
-                    scope.insuranceCompanyId = data.mediationCase.insuranceAgentContact
-                    scope.insuranceAgentContact = data.mediationCase.gmtClientCaseCreated
-                })
-            }
+            scope.submitStep2 = function(n){
+                $state.go('MainPage', {step: Number(step) + n, id: id})                
+            }  
         }
     }
 }]);

@@ -6,7 +6,10 @@ var apiCommand = {
 	LOGIN 					: 'login' 								,
 	LOGOUT 					: 'logout' 								,
 	VERIFICATIONCODE 		: 'RIGHT_URL/verificationCode' 			,
-	GETCONDITIONALALLCASE 	: 'MEDIATION_URL/getConditionalAllCase' 
+	GETCONDITIONALALLCASE 	: 'MEDIATION_URL/getConditionalAllCase' ,
+	GETCHANNELANDCOMPANY 	: 'MEDIATION_URL/getChannelAndCompany' 	,
+	GETSERVICEAREA 			: 'MEDIATION_URL/getServiceArea' 		,
+	GETCASEBASEINFO 		: 'MEDIATION_URL/getCaseBaseInfo' 		
 }
 
 angular.module('myApp.mainPage.service', [])
@@ -14,7 +17,7 @@ angular.module('myApp.mainPage.service', [])
 		var mainFun = {};
 
 		mainFun.getVerifyCode = function() {
-			return  $http.post(apiUrl+apiCommand.GETVERIFYCODE)
+			return  $http.post(apiUrl+apiCommand.GETVERIFYCODE + '?noToken=false')
 						 .then(function(res){
 						 	if(res.data.status.code == 1){
 						 		return res.data.result
@@ -41,10 +44,24 @@ angular.module('myApp.mainPage.service', [])
 		};
 
 		mainFun.verificationCode = function(verifyCode, verifySn) {
-			return  $http.post(apiUrl+apiCommand.VERIFICATIONCODE, {verifyCode: verifyCode, verifySn: verifySn})
+			return  $http.post(apiUrl+apiCommand.VERIFICATIONCODE + '?noToken=false', {verifyCode: verifyCode, verifySn: verifySn})
 						 .then(function(res){						 	
 						 	if(res.data.status.code == 1){
 						 		return true;
+						 	}else{
+						 		return false;
+						 	}
+						 })
+						 .catch(function(err){
+						 	console.log(err);
+						 })
+		};
+
+		mainFun.getChannelAndCompany = function(pageNow, token) {
+			return  $http.post(apiUrl+apiCommand.GETCHANNELANDCOMPANY, {})
+						 .then(function(res){						 	
+						 	if(res.data.status.code == 1){
+						 		return res.data.result;
 						 	}else{
 						 		return false;
 						 	}
@@ -59,6 +76,36 @@ angular.module('myApp.mainPage.service', [])
 						 .then(function(res){						 	
 						 	if(res.data.status.code == 1){
 						 		return res.data.result.mediationCases;
+						 	}else{
+						 		return false;
+						 	}
+						 })
+						 .catch(function(err){
+						 	console.log(err);
+						 })
+		};
+
+		mainFun.getServiceArea = function(id) {
+			var aid = id || 1;
+			return  $http.post(apiUrl+apiCommand.GETSERVICEAREA, {id: id})
+						 .then(function(res){						 	
+						 	if(res.data.status.code == 1){
+						 		return res.data.result;
+						 	}else{
+						 		return false;
+						 	}
+						 })
+						 .catch(function(err){
+						 	console.log(err);
+						 })
+		};
+
+		mainFun.getCaseBaseInfo = function(id) {
+			var aid = id || 1;
+			return  $http.post(apiUrl+apiCommand.GETCASEBASEINFO, {caseId: id})
+						 .then(function(res){						 	
+						 	if(res.data.status.code == 1){
+						 		return res.data.result;
 						 	}else{
 						 		return false;
 						 	}

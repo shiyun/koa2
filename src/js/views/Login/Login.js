@@ -35,7 +35,7 @@ angular.module('myApp.Login', ['ui.router'])
 							}else{
 								//alert('登录成功');									
 								//$state.go('MainPage', {id: '333'}); //$stateParams.id 来接收
-								$state.go('MainPage'); //$stateParams.id 来接收
+								$state.go('MainPage', {id: 0, step: 1}); //第一次没ID默认用0来表示
 							}
 						});
 					}else{

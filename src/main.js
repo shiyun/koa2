@@ -7,7 +7,9 @@ var myApp = angular.module('myApp', [
 		'myApp.mainPage.service',
 		'myApp.directive.tabList',
 		'myApp.directive.headerTop',
-		'myApp.directive.formStep1'		
+		'myApp.directive.formStep1',
+		'myApp.directive.formStep2',
+		'myApp.directive.areaLevel'		
 	]);
 
 myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider){
@@ -23,7 +25,7 @@ myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider, $locati
 	            controller: 'LoginCtrl'
 	        })
 	        .state("MainPage", {
-	            url: "/ng/{id}", //$stateParams 传值要设置为 /ng/:id
+	            url: "/ng/:step/:id", //$stateParams 传值要设置为 /ng/:id, 可选项用/ng/{id}来表示
 	            templateUrl: "/js/views/MainPage/MainPage.html",
 	            controller: 'MainPageCtrl'
 	        })

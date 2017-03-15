@@ -1,13 +1,10 @@
 angular.module('myApp.directive.tabList', [
-]).directive('tabList', ["mainService", "$cookieStore",  function(mainService, $cookieStore) {
+]).directive('tabList', ["mainService", "$cookieStore", "localStorageService", "$state", "$stateParams",  function(mainService, $cookieStore, localStorageService, $state, $stateParams) {
     return {
         restrict: 'EA',
         replace: true,
-        transclude: true,  
-        scope: {
-            tData: '='
-        },      
-        template: '<table class="table">'+
+        transclude: true,     
+        template: '<div><table class="table">'+
             '           <thead>'+
             '               <tr>'+
             '                   <th>案件ID</th>'+
@@ -28,13 +25,22 @@ angular.module('myApp.directive.tabList', [
             '                   <td ng-click="aa()">{{x.action.state}}</td>'+
             '               </tr>'+
             '           </tbody>'+
-            '       </table>',
+            '       </table><p><button ng-click="submitStep3()">返回</button></p></div>',
         controller: function() {
 
         },
         link: function postLink(scope, iElement, iAttrs, controller) {
+            mainService.getConditionalAllCase(1, localStorageService.get('token')).then(function(res){
+                scope.tData = res;
+            });
             scope.aa = function(){
                 scope.tData = [{id: 1, clientCaseId:1, sysNodeStatus:1, gmtCaseEntrusted: 1, mediator:1, state: 1}]      
+            }
+
+            var id = $stateParams.id;
+            var step = $stateParams.step;
+            scope.submitStep3 = function(){
+                $state.go('MainPage', {step: Number(step) - 1, id: id})                
             }
         }
     }
