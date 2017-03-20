@@ -25,7 +25,6 @@ angular.module('myApp.directive.formStep1', [
                 scope.channels = data.channels;
                 scope.companies = data.companies;
             });
-
             var id = $stateParams.id; //获取的caseid
             var step = $stateParams.step;
 
