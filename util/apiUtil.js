@@ -1,4 +1,4 @@
-import request from 'koa-request'
+//import request from 'koa-request'
 import _ from 'lodash'
 import fetch from 'node-fetch'
 

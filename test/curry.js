@@ -1,3 +1,4 @@
+import fetch from 'node-fetch'
 import _ from 'lodash'
 const compose = _.flow;
 const curry = _.curry;
@@ -95,6 +96,24 @@ var sanitizeNames = map(compose(prop('name'), uppercase, _underscore))
 const padRight = curry((n, pad, str) => _.pad(str, n, pad));
 const append = curry((what, str) => `${str}${what}`)
 let fastestCar = compose(sortBy('horsepower'), _.first, prop('name'),  append(' is the fastest'))
-console.log(fastestCar(CARS))
+//console.log(fastestCar(CARS))
+
+const toUser = form => form.user;
+const login = user => user == 'shi';
+const formData = {user: 'shi'};
+let authenticate = form => {
+  let user = toUser(form);
+  return login(user)
+}
+let authenticate2 = compose(toUser, login)
+//console.log(authenticate2(formData));
 
 
+const aa = async () => {
+  let txt = await fetch('http://localhost:3001/api/getUser');
+  let txt2 = await txt.json();
+  return txt2;
+}
+const getname = obj => obj.code;
+const name = compose(aa, getname)
+console.log(name());
