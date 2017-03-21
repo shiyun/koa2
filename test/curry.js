@@ -40,6 +40,7 @@ const reverse = curry(arr => arr.reverse());
 const trace = curry((tag, x) => { console.log(tag, x); return x;})
 const getHeader = curry(str => str[0]);
 const prop = curry((prop, obj) => obj[prop]);
+const sortBy = curry((by, obj) => _.sortBy(obj, by))
 //let a = match(/\s+/g, "hello world");
 //let a = match(/\s+/g);
 //console.log(filter(a, ["tori_spelling", "tori amos"]));
@@ -98,4 +99,16 @@ let averageDollarValue = compose(map(prop('dollar_value')), _average)
 var _underscore = replace(/\W+/g, '_'); //<-- 无须改动，并在 sanitizeNames 中使用它
 
 var sanitizeNames = map(compose(prop('name'), uppercase, _underscore))
-console.log(sanitizeNames(CARS))
+//console.log(sanitizeNames(CARS))
+
+// 重构使之成为 pointfree 函数。提示：可以使用 _.flip()
+/*var fastestCar = function(cars) {
+  var sorted = _.sortBy(function(car){ return car.horsepower }, cars);
+  var fastest = _.last(sorted);
+  return fastest.name + ' is the fastest';
+};*/
+const padRight = curry((n, pad, str) => _.pad(str, n, pad));
+let fastestCar = compose(sortBy('horsepower'), _.first, prop('name'), padRight(50, ' '))
+console.log(fastestCar(CARS))
+
+
