@@ -1,8 +1,7 @@
 import _ from 'lodash'
-
 const compose = _.flow;
 const curry = _.curry;
-
+import { add, match, filter, replace, map, reduce, split, slice, uppercase, join, reverse, trace, getHeader, prop, sortBy } from '../util/support'
 /*
 let count = 0;
 let memoizer = function(memo, formula){
@@ -26,21 +25,7 @@ for (let i=0; i<=10; i++){
 	console.log(fibonacci(i));
 }
 */
-const add = curry((x, y) => x + y);
-const match = curry((what, str) => str.match(what));
-const filter = curry((f, arr) => arr.filter(f));
-const replace = curry((zj, restr, str) => str.replace(zj, restr));
-const map = curry((f, arr) => arr.map(f));
-const reduce = curry((f, a, arr) => arr.reduce(f, a));
-const split = curry((what, str) => str.split(what));
-const slice = curry((start, end, arr) => arr.slice(start, end));
-const uppercase = curry(x => x.toUpperCase());
-const join = curry((what, arr) => arr.join(what));
-const reverse = curry(arr => arr.reverse());
-const trace = curry((tag, x) => { console.log(tag, x); return x;})
-const getHeader = curry(str => str[0]);
-const prop = curry((prop, obj) => obj[prop]);
-const sortBy = curry((by, obj) => _.sortBy(obj, by))
+
 //let a = match(/\s+/g, "hello world");
 //let a = match(/\s+/g);
 //console.log(filter(a, ["tori_spelling", "tori amos"]));
@@ -108,7 +93,8 @@ var sanitizeNames = map(compose(prop('name'), uppercase, _underscore))
   return fastest.name + ' is the fastest';
 };*/
 const padRight = curry((n, pad, str) => _.pad(str, n, pad));
-let fastestCar = compose(sortBy('horsepower'), _.first, prop('name'), padRight(50, ' '))
+const append = curry((what, str) => `${str}${what}`)
+let fastestCar = compose(sortBy('horsepower'), _.first, prop('name'),  append(' is the fastest'))
 console.log(fastestCar(CARS))
 
 
