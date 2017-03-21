@@ -1,0 +1,10 @@
+let runkoa = require('runkoa');
+let path = require('path');
+let current_path = process.cwd();
+
+//let file = current_path + '/test/' + process.argv[2];
+let file2 = path.join(__dirname, process.argv[2]);
+//console.log(process.argv);
+//console.log(file2);
+
+runkoa(file2)
