@@ -108,14 +108,7 @@ let authenticate = form => {
 let authenticate2 = compose(toUser, login)
 //console.log(authenticate2(formData));
 
-const getname = obj => obj.code;
-
-
-const aa = async () => {
-  let txt = await fetch('http://localhost:3001/api/getUser');
-  let txt2 = await txt.json();
-  let a = getname(txt2);
-  return a;
-}
-aa().then(res => console.log(res))
-
+// http://localhost:3001/ng/1/657?edit=1&isFirst=false 截取
+const getArrIndex = curry((index, arr) => arr[index]);
+let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), _.zipObject)
+console.log(getParams('http://localhost:3001/ng/1/657?edit=1&isFirst=false'))
