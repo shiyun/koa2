@@ -108,12 +108,14 @@ let authenticate = form => {
 let authenticate2 = compose(toUser, login)
 //console.log(authenticate2(formData));
 
+const getname = obj => obj.code;
+
 
 const aa = async () => {
   let txt = await fetch('http://localhost:3001/api/getUser');
   let txt2 = await txt.json();
-  return txt2;
+  let a = getname(txt2);
+  return a;
 }
-const getname = obj => obj.code;
-const name = compose(aa, getname)
-console.log(name());
+aa().then(res => console.log(res))
+

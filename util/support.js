@@ -15,9 +15,9 @@ export const uppercase = curry(x => x.toUpperCase());
 export const join = curry((what, arr) => arr.join(what));
 export const reverse = curry(arr => arr.reverse());
 export const trace = curry((tag, x) => { console.log(tag, x); return x;})
-export const getHeader = curry(str => str[0]);
 export const prop = curry((prop, obj) => obj[prop]);
 export const sortBy = curry((by, obj) => _.sortBy(obj, by))
+export const getHeader = curry(str => str[0]);
 
 /*module.exports = {
   add,
