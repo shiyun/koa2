@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import _ from 'lodash'
+import fp from 'lodash/fp'
 const compose = _.flow;
 const curry = _.curry;
 import { add, match, filter, replace, map, reduce, split, slice, uppercase, join, reverse, trace, getHeader, prop, sortBy } from '../util/support'
@@ -111,5 +112,17 @@ let authenticate2 = compose(toUser, login)
 // http://localhost:3001/ng/1/657?edit=1&isFirst=false 截取
 const getArrIndex = curry((index, arr) => arr[index]);
 const zipObject = arr => _.zipObject(...arr);
-let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), zipObject)
-console.log(getParams('http://localhost:3001/ng/1/657?edit=1&isFirst=false'))
+let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), _.fromPairs)
+//console.log(getParams('http://localhost:3001/ng/1/657?edit=1&isFirst=false'))
+//console.log(fp.padCharsStart('-')(3)('a'));
+class Mybe {
+	constructor(x){
+		this.__value = x;
+	}
+
+	map(f){
+		return new Mybe(f(this.__value))
+	}
+}
+Mybe.of = x => new Mybe(x)
+console.log(Mybe.of(3).map(two=>two+2))
