@@ -110,5 +110,6 @@ let authenticate2 = compose(toUser, login)
 
 // http://localhost:3001/ng/1/657?edit=1&isFirst=false 截取
 const getArrIndex = curry((index, arr) => arr[index]);
-let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), _.zipObject)
+const zipObject = arr => _.zipObject(...arr);
+let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), zipObject)
 console.log(getParams('http://localhost:3001/ng/1/657?edit=1&isFirst=false'))
