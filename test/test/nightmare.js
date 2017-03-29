@@ -2,7 +2,24 @@ var Nightmare = require('nightmare');
 var nightmare = Nightmare({ show: true });
 
 nightmare
-  .goto('https://duckduckgo.com')
+  .goto('https://www.baidu.com')
+  .type('#kw', 'github nightmare')
+  .click('#su')
+  .wait(1000)
+  .evaluate(() => {
+      let arr = [];
+      let els = document.querySelectorAll('h3.t a');
+    for (let i = 0, n = els.length; i<n; i++){
+      arr.push(els[i].innerHTML);
+    }  
+    return arr;
+  })
+  .end()
+  .then(res => console.log(res))
+  .catch(err => console.log(err))
+
+/*nightmare
+  .goto('https://www.baidu.com')
   .type('#search_form_input_homepage', 'github nightmare')
   .click('#search_button_homepage')
   .wait('#zero_click_wrapper .c-info__title a')
@@ -15,7 +32,7 @@ nightmare
   })
   .catch(function (error) {
     console.error('Search failed:', error);
-  });
+  });*/
 
 /*
 

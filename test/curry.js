@@ -1,6 +1,8 @@
 import fetch from 'node-fetch'
 import _ from 'lodash'
 import fp from 'lodash/fp'
+import fs from 'fs'
+
 const compose = _.flow;
 const curry = _.curry;
 import { add, match, filter, replace, map, reduce, split, slice, uppercase, join, reverse, trace, getHeader, prop, sortBy } from '../util/support'
@@ -115,14 +117,65 @@ const zipObject = arr => _.zipObject(...arr);
 let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), _.fromPairs)
 //console.log(getParams('http://localhost:3001/ng/1/657?edit=1&isFirst=false'))
 //console.log(fp.padCharsStart('-')(3)('a'));
-class Mybe {
+class Functor {
 	constructor(x){
 		this.__value = x;
 	}
 
 	map(f){
-		return new Mybe(f(this.__value))
+		return new Functor(f(this.__value))
 	}
 }
-Mybe.of = x => new Mybe(x)
-console.log(Mybe.of(3).map(two=>two+2))
+
+Functor.of = n => new Functor(n);
+
+class Maybe extends Functor {
+	map(f){
+		return this.__value ? new Maybe.of(f(this.__value)) : new Maybe.of(this.__value)
+	}
+}
+
+class Either extends Functor {
+	constructor(left, right) {
+		if(right){
+			super(right)
+		}else{
+			super(left)
+		}
+	}
+
+	map(f) {
+		console.log(this.right)
+		return this.right ? 
+			Either.of(this.left, f(this.right)) :
+			Either.of(f(this.left), this.right);
+	}
+}
+
+Either.of = (left, right) => new Either(left, right);
+const addOne = n => n+1;
+console.log(Either.of(5, null).map(addOne))
+
+class Ap extends Functor {
+	ap(F) {
+		return Ap.of(this.__value(F.__value));
+	}
+}
+Ap.of = n => new Ap(n);
+const addTwo = curry((x, y) => _.add(x, y))
+//console.log(Ap.of(addTwo).ap(Maybe.of(3)).ap(Maybe.of(4)))
+
+class Monad extends Functor {
+	join(){
+		return this.__value;
+	}
+
+	flatMap(f){
+		return this.map(f).join();
+	}
+}
+
+const readFile = filename => fs.readFileSync(filename, 'utf-8')
+//console.log(readFile(__dirname+'/runkoa'));
+
+console.log(fp.map(parseInt)(['6', '8', '10']))
