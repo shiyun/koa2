@@ -14,6 +14,16 @@
     <span v-text="msg"></span>
 </div>
 
-<script src="./js/demo.min.js"></script>
+
+<div id="test" style="border: 1px solid #eee; padding: 20px;">
+    <p>v-model 绑定的输入框，可同步下面的v-msg文本: <input v-model="msg" placeholder="edit me"></p>
+    <p>v-msg 文本: <span v-text="msg"></span></p>
+    <hr>
+    <p>v-show 显示隐藏 demo: <span v-show="isShow">我是v-show属性绑定元素</span></p>
+    <p>v-on:click，可以触发上面文本的显示隐藏<a href="javascript:;" v-on:click="changeShow" v-text="btn"></a></p>
+</div>
+<br>
+
+<script src="./js/vue.min.js"></script>
 </body>
 </html>

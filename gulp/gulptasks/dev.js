@@ -12,7 +12,7 @@ import stage3 from 'babel-preset-stage-3';
 const plugins = loadPlugns();
 
 const pathUrl = './';
-const jsArr = ['demo'];
+const jsArr = ['demo', 'vue'];
 
 jsArr.forEach(file=>{
 	gulp.task(file, ()=>{
