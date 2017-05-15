@@ -3,9 +3,7 @@ import _ from 'lodash'
 import fp from 'lodash/fp'
 import fs from 'fs'
 
-const compose = _.flow;
-const curry = _.curry;
-import { add, match, filter, replace, map, reduce, split, slice, uppercase, join, reverse, trace, getHeader, prop, sortBy } from '../util/support'
+import { compose, compose2, curry, add, match, filter, replace, map, reduce, split, slice, uppercase, join, reverse, trace, getHeader, prop, sortBy } from '../util/support'
 /*
 let count = 0;
 let memoizer = function(memo, formula){
@@ -44,17 +42,17 @@ let sentences = map(words);
 //console.log(sentences(["Jingle bells Batman smells"]));
 let filterqs = filter(match(/q/ig));
 //console.log(filterqs(['quickly', 'over', 'quit']))
-let _keepHighest = function(x,y){ return x >= y ? x : y; };
+let _keepHighest = (x, y) => x >= y ? x : y;
 //求数组里最大值
 let max = reduce(_keepHighest, -Infinity)
 //console.log(max([323,523,554,12300,5234]));
 let take = slice(0);
 //console.log(take(4, [1,2,3,'a', 'b', 'c']));
 //取一段英语语句的单词的首字母，转成大写并用.拼接
-let initials = compose(split(' '), map(getHeader), reverse, join('.'), uppercase);
+let initials = compose2(split(' '), map(getHeader), reverse, join('.'), uppercase);
 //console.log(initials("hunter stockton thompson"));
 
-// 使用 _.compose() 重写下面这个函数。提示：_.prop() 是 curry 函数
+// 使用 _.compose2() 重写下面这个函数。提示：_.prop() 是 curry 函数
 var CARS = [
     {name: "Ferrari FF", horsepower: 660, dollar_value: 700000, in_stock: true},
     {name: "Spyker C12 Zagato", horsepower: 650, dollar_value: 648000, in_stock: false},
@@ -69,25 +67,25 @@ var isLastInStock = function(cars) {
   return _.property('in_stock', last_car);
 };
 */
-let isLastInStock = compose(_.last, prop('in_stock'));
-let nameOfFirstCar = compose(_.first, prop('name'));
+let isLastInStock = compose2(_.last, prop('in_stock'));
+let nameOfFirstCar = compose2(_.first, prop('name'));
 //console.log(nameOfFirstCar(CARS));
 
 // 使用帮助函数 _average 重构 averageDollarValue 使之成为一个组合
-var _average = function(xs) { return reduce(add, 0, xs) / xs.length; }; // <- 无须改动
+const _average = xs => reduce(add, 0, xs) / xs.length; // <- 无须改动
 //console.log(_average([1,2,3])); //打印出来数组相加，再除以数组个数
 /*var averageDollarValue = function(cars) {
   var dollar_values = map(function(c) { return c.dollar_value; }, cars);
   return _average(dollar_values);
 };*/
-let averageDollarValue = compose(map(prop('dollar_value')), _average)
+let averageDollarValue = compose2(map(prop('dollar_value')), _average)
 //console.log(averageDollarValue(CARS))
 
-// 使用 compose 写一个 sanitizeNames() 函数，返回一个下划线连接的小写字符串：例如：sanitizeNames(["Hello World"]) //=> ["hello_world"]。
+// 使用 compose2 写一个 sanitizeNames() 函数，返回一个下划线连接的小写字符串：例如：sanitizeNames(["Hello World"]) //=> ["hello_world"]。
 
 var _underscore = replace(/\W+/g, '_'); //<-- 无须改动，并在 sanitizeNames 中使用它
 
-var sanitizeNames = map(compose(prop('name'), uppercase, _underscore))
+var sanitizeNames = map(compose2(prop('name'), uppercase, _underscore))
 //console.log(sanitizeNames(CARS))
 
 // 重构使之成为 pointfree 函数。提示：可以使用 _.flip()
@@ -98,7 +96,7 @@ var sanitizeNames = map(compose(prop('name'), uppercase, _underscore))
 };*/
 const padRight = curry((n, pad, str) => _.pad(str, n, pad));
 const append = curry((what, str) => `${str}${what}`)
-let fastestCar = compose(sortBy('horsepower'), _.first, prop('name'),  append(' is the fastest'))
+let fastestCar = compose2(sortBy('horsepower'), _.first, prop('name'),  append(' is the fastest'))
 //console.log(fastestCar(CARS))
 
 const toUser = form => form.user;
@@ -108,15 +106,52 @@ let authenticate = form => {
   let user = toUser(form);
   return login(user)
 }
-let authenticate2 = compose(toUser, login)
+let authenticate2 = compose2(toUser, login)
 //console.log(authenticate2(formData));
 
 // http://localhost:3001/ng/1/657?edit=1&isFirst=false 截取
 const getArrIndex = curry((index, arr) => arr[index]);
 const zipObject = arr => _.zipObject(...arr);
-let getParams = compose(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), _.fromPairs)
+let getParams2 = compose2(split('?'), getArrIndex(1), split('&'), map(split('=')), trace('index'), _.fromPairs)
+let getParams = compose(_.fromPairs, map(split('=')), split('&'), getArrIndex(1), split('?'))
 //console.log(getParams('http://localhost:3001/ng/1/657?edit=1&isFirst=false'))
 //console.log(fp.padCharsStart('-')(3)('a'));
+
+let arrNum = [1,3,2,45,22,34,2,33,5,2,1,10,22,111];
+const sort = curry((f, arr) => arr.sort(f));
+const eq = arr => {
+	let newarr = [];
+	for(let i=0, n=arr.length; i<n;){
+		let num = 0;
+		for(let j=0;j<n;j++){
+			if(arr[i] == arr[j]) num++;
+		}
+		newarr.push({cur: arr[i], num})
+		i+=num;
+	}
+	return newarr;
+};
+
+const unqu = arr => {
+	let hash = [], a = [];
+	arr.map(v=>{
+		hash[v] = null;
+	})
+	for(let i in hash){
+		a.push(i)
+	}
+	return a;
+}
+let arrFn = compose(unqu, sort((a, b) => a - b));
+//console.log(arrFn(arrNum));
+
+const mul = curry((a, b) => a * b);
+const dec = x => x - 1;
+const equal = curry((a, b) => a===b);
+const factorial = curry((f, n) => equal(n, 1) ? 1 : f(n));
+// const factorialFn = compose(reduce())
+//console.log(Object.keys(Array.from({length: 100})))
+
 class Functor {
 	constructor(x){
 		this.__value = x;
@@ -154,7 +189,7 @@ class Either extends Functor {
 
 Either.of = (left, right) => new Either(left, right);
 const addOne = n => n+1;
-console.log(Either.of(5, null).map(addOne))
+//console.log(Either.of(5, null).map(addOne))
 
 class Ap extends Functor {
 	ap(F) {
@@ -178,4 +213,4 @@ class Monad extends Functor {
 const readFile = filename => fs.readFileSync(filename, 'utf-8')
 //console.log(readFile(__dirname+'/runkoa'));
 
-console.log(fp.map(parseInt)(['6', '8', '10']))
+//console.log(fp.map(parseInt)(['6', '8', '10']))

@@ -200,11 +200,37 @@
     /**
      * 创建vm实例
      */
-    var vm = new Vue('test', {
+    /*var vm = new Vue('test', {
         msg: 'aaa',
         isShow: true,
         btn: '点击我',
         changeShow: function(){
             vm.$data.isShow = !vm.$data.isShow;
         }
-    });
+    });*/
+
+import _ from 'lodash';
+class Vuex {
+    constructor(el, opts){
+        this.$data = {};
+        this.$opts = opts || {};
+        let root = this.$el = document.getElementById(el);
+        let els = root.querySelectorAll(selector)
+        , _binds = {'dd':2};
+
+        this.init(_binds);
+    }
+
+    init(binds){
+        this.initData(binds);
+    }
+    
+    initData(binds){
+        _.map(binds, (v, k) => {
+            this.$data[k] = this.$opts[k];
+            console.log(`${k} - ${v}`);
+        });
+    }
+}
+
+const vm = new Vuex('test', {dd: 3});

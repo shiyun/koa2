@@ -55,36 +55,6 @@ root.addEventListener('click', _ => {
 },false);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 const bindingMark = 'v-text';
 

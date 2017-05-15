@@ -25,6 +25,7 @@ app.use(convert(json()));
 app.use(convert(logger()));
 app.use(require('koa-static')(__dirname + '/public'));
 app.use(require('koa-static')(__dirname + '/src'));
+app.use(require('koa-static')(__dirname + '/gulp/public'));
 
 app.use(views(__dirname + '/views', {
   map: {html: 'ejs'}
